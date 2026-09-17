@@ -16,6 +16,8 @@ const POSES = [
   { src: "/mascot (1).png", message: "Speak to me on WhatsApp 👋" },
   { src: "/mascot (2).png", message: "Free quote? Just ask 👍" },
   { src: "/mascot (3).png", message: "Hey! Got a project in mind? 👋" },
+  { src: "/mascot (4).png", message: "Why don't you have a website yet?! 😤" },
+  { src: "/mascot (5).png", message: "Get one noooow!! 🔥" },
 ];
 
 const POSE_INTERVAL_MS = 5000; // how long each pose shows before crossfading to the next
