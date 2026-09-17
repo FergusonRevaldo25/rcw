@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import Image from "next/image";
 import MiniTerminal from "@/components/MiniTerminal";
 import ProjectTimeline from "@/components/Projecttimeline";
 
@@ -161,6 +162,23 @@ export default function BehindTheScenesPage() {
               </p>
             </div>
           ))}
+
+          {/* Filler card — 7 items in a 3-col grid leaves the last row
+              short by 2 (short by 1 at the sm 2-col breakpoint). This one
+              card's responsive col-span closes both gaps with the same
+              element instead of needing separate mobile/desktop fillers. */}
+          <div className="sm:col-span-1 lg:col-span-2 rounded-2xl gradient-ring bg-[url('/ijf.png')] bg-cover bg-center p-6 flex items-center justify-center overflow-hidden">
+            <div className="relative w-40 sm:w-45 lg:w-80 aspect-[865/1092]">
+              <Image
+                src="/mascot-7.png"
+                alt=""
+                aria-hidden="true"
+                fill
+                sizes="(min-width: 1024px) 224px, 192px"
+                className="object-contain object-bottom"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
