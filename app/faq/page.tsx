@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "FAQ",
+  description:
+    "Answers to common questions about pricing, timelines, hosting, and how the RCW website process works.",
+  alternates: { canonical: "/faq" },
+};
+
 const faqs = [
   {
     q: "How long does a site take?",

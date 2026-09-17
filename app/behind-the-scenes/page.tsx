@@ -1,5 +1,14 @@
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import MiniTerminal from "@/components/MiniTerminal";
+import ProjectTimeline from "@/components/Projecttimeline";
+
+export const metadata: Metadata = {
+  title: "Behind the Scenes",
+  description:
+    "How an RCW site actually gets built — the real code, infrastructure, and tooling behind every project.",
+  alternates: { canonical: "/behind-the-scenes" },
+};
 
 type Item = {
   tag: string;
@@ -47,7 +56,10 @@ const ITEMS: Item[] = [
     visual: (
       <MiniTerminal
         filename="query.sql"
-        lines={["INSERT INTO bookings", "VALUES ('Corner Coffee', 'Sat 10am');"]}
+        lines={[
+          "INSERT INTO bookings",
+          "VALUES ('Corner Coffee', 'Sat 10am');",
+        ]}
         resultLine="✓ 1 row inserted"
       />
     ),
@@ -73,7 +85,12 @@ const ITEMS: Item[] = [
     visual: (
       <MiniTerminal
         filename="notify.ts"
-        lines={["await sendEmail({", "  to: owner,", "  subject: 'New booking',", "});"]}
+        lines={[
+          "await sendEmail({",
+          "  to: owner,",
+          "  subject: 'New booking',",
+          "});",
+        ]}
         resultLine="✓ Email sent"
       />
     ),
@@ -99,7 +116,11 @@ const ITEMS: Item[] = [
     visual: (
       <MiniTerminal
         filename="layout.tsx"
-        lines={["export const metadata = {", "  title: 'Corner Coffee Co.',", "};"]}
+        lines={[
+          "export const metadata = {",
+          "  title: 'Corner Coffee Co.',",
+          "};",
+        ]}
         resultLine="✓ Meta tags set"
       />
     ),
@@ -118,12 +139,11 @@ export default function BehindTheScenesPage() {
         </h1>
         <p className="text-[var(--color-muted)] max-w-lg">
           Not a black box. Here&apos;s what&apos;s actually happening between
-          &quot;let&apos;s do this&quot; and your site going live — the
-          code, the infrastructure, and the parts most agencies
-          don&apos;t show you.
+          &quot;let&apos;s do this&quot; and your site going live — the code,
+          the infrastructure, and the parts most agencies don&apos;t show you.
         </p>
       </section>
-
+      <ProjectTimeline />
       <section className="container-page pb-20">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {ITEMS.map((item) => (
@@ -136,7 +156,9 @@ export default function BehindTheScenesPage() {
                 {item.tag}
               </span>
               <p className="font-semibold mb-2">{item.title}</p>
-              <p className="text-sm text-[var(--color-muted)]">{item.description}</p>
+              <p className="text-sm text-[var(--color-muted)]">
+                {item.description}
+              </p>
             </div>
           ))}
         </div>
@@ -148,8 +170,8 @@ export default function BehindTheScenesPage() {
             Want to see it built for your business?
           </h2>
           <p className="text-[var(--color-muted)] max-w-md mx-auto mb-8">
-            Same process, every time — real code, a real database, and a
-            site that&apos;s actually yours to keep.
+            Same process, every time — real code, a real database, and a site
+            that&apos;s actually yours to keep.
           </p>
           <a href="/contact" className="btn-primary">
             Get a quote

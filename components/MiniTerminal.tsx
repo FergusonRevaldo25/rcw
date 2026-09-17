@@ -8,124 +8,124 @@ type MiniTerminalProps = {
   resultLine?: string;
 };
 
-const CHAR_MS = 28;
-const LINE_PAUSE_MS = 200;
-const RESULT_DELAY_MS = 350;
-const HOLD_MS = 1800;
+const CHAR_DELAY_MS = 45; // typing speed per character
+const RESULT_DELAY_MS = 200; // pause after typing finishes, before the result line appears
+const HOLD_MS = 2400; // how long the finished state stays on screen before looping
+const FADE_MS = 300; // fade-out duration when resetting to type again
 
-function highlight(line: string) {
-  const parts = line.split(
-    /('[^']*'|"[^"]*"|\bexport\b|\bdefault\b|\bfunction\b|\breturn\b|\basync\b|\bawait\b|\bconst\b|\blet\b|\bSELECT\b|\bFROM\b|\bWHERE\b|\bINSERT\b|\bINTO\b|\bVALUES\b|<\/?[A-Za-z][^\s>]*|\/>|>)/g,
-  );
-  return parts.map((part, i) => {
-    if (!part) return null;
-    if (part.startsWith("'") || part.startsWith('"')) {
-      return (
-        <span key={i} style={{ color: "#FCAF45" }}>
-          {part}
-        </span>
-      );
-    }
-    if (/^<\/?[A-Za-z]/.test(part) || part === "/>" || part === ">") {
-      return (
-        <span key={i} style={{ color: "#E1306C" }}>
-          {part}
-        </span>
-      );
-    }
-    if (
-      [
-        "export", "default", "function", "return", "async", "await",
-        "const", "let", "SELECT", "FROM", "WHERE", "INSERT", "INTO", "VALUES",
-      ].includes(part)
-    ) {
-      return (
-        <span key={i} style={{ color: "#833AB4" }}>
-          {part}
-        </span>
-      );
-    }
-    return <span key={i}>{part}</span>;
-  });
-}
-
-export default function MiniTerminal({ filename, lines, resultLine }: MiniTerminalProps) {
-  const [lineIndex, setLineIndex] = useState(0);
-  const [charIndex, setCharIndex] = useState(0);
+// A terminal card that types its lines, holds, fades out, and retypes —
+// looping continuously. Starts once scrolled into view (not on page load),
+// with a small random stagger per instance so a grid of these doesn't type
+// in perfect lockstep. Fixed min-height so every card in a grid lines up
+// regardless of how many lines of code it holds.
+export default function MiniTerminal({
+  filename,
+  lines,
+  resultLine,
+}: MiniTerminalProps) {
+  const fullText = lines.join("\n");
+  const [charsShown, setCharsShown] = useState(0);
   const [showResult, setShowResult] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [fading, setFading] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const startedRef = useRef(false);
+  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   useEffect(() => {
-    function clear() {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    const el = containerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !startedRef.current) {
+          startedRef.current = true;
+          observer.disconnect();
+          const stagger = Math.random() * 1000;
+          schedule(() => runCycle(), stagger);
+        }
+      },
+      { threshold: 0.3 },
+    );
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+      timers.current.forEach(clearTimeout);
+    };
+
+    function schedule(fn: () => void, delay: number) {
+      const id = setTimeout(fn, delay);
+      timers.current.push(id);
+      return id;
     }
 
-    const currentLine = lines[lineIndex] ?? "";
+    function runCycle() {
+      setFading(false);
+      setShowResult(false);
+      typeNext(0);
+    }
 
-    if (!showResult) {
-      if (charIndex < currentLine.length) {
-        timeoutRef.current = setTimeout(() => setCharIndex((c) => c + 1), CHAR_MS);
-      } else if (lineIndex < lines.length - 1) {
-        timeoutRef.current = setTimeout(() => {
-          setLineIndex((l) => l + 1);
-          setCharIndex(0);
-        }, LINE_PAUSE_MS);
-      } else if (resultLine) {
-        timeoutRef.current = setTimeout(() => setShowResult(true), RESULT_DELAY_MS);
-      } else {
-        timeoutRef.current = setTimeout(() => {
-          setLineIndex(0);
-          setCharIndex(0);
-        }, HOLD_MS);
+    function typeNext(count: number) {
+      setCharsShown(count);
+      if (count < fullText.length) {
+        schedule(() => typeNext(count + 1), CHAR_DELAY_MS);
+        return;
       }
-    } else {
-      timeoutRef.current = setTimeout(() => {
-        setShowResult(false);
-        setLineIndex(0);
-        setCharIndex(0);
-      }, HOLD_MS);
+      // Finished typing this pass.
+      if (resultLine) {
+        schedule(() => setShowResult(true), RESULT_DELAY_MS);
+      }
+      schedule(() => resetCycle(), HOLD_MS);
     }
 
-    return clear;
-  }, [lineIndex, charIndex, showResult, lines, resultLine]);
+    function resetCycle() {
+      setFading(true);
+      schedule(() => {
+        setCharsShown(0);
+        setShowResult(false);
+        setFading(false);
+        runCycle();
+      }, FADE_MS);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Fixed row count for the whole cycle — same height-glitch fix as
-  // CodeWindow/BuildDemo: rows always render. Not-yet-typed rows use a
-  // non-breaking space (not an empty string) — an empty <div> collapses to
-  // 0px with no line-box, so without this the box grows taller each time
-  // a new line starts typing instead of holding a constant height.
-  const rows = lines.map((line, i) => {
-    if (i < lineIndex) return line;
-    if (i === lineIndex) return line.slice(0, charIndex) || "\u00A0";
-    return "\u00A0";
-  });
+  const displayedLines = fullText.slice(0, charsShown).split("\n");
+  const isTyping = charsShown < fullText.length;
 
   return (
-    <div className="rounded-xl overflow-hidden bg-[#0A0A0A] text-[#EDEDED] font-mono text-[11px] shadow-md">
-      <div className="flex items-center gap-1.5 px-3 py-2 border-b border-white/10">
+    <div
+      ref={containerRef}
+      className="rounded-xl overflow-hidden bg-[#0A0A0A] text-[#EDEDED] font-mono text-xs shadow-md flex flex-col min-h-[180px]"
+    >
+      <div className="flex items-center gap-1.5 px-3 py-2 border-b border-white/10 shrink-0">
         <span className="h-2 w-2 rounded-full bg-[#FF5F56]" />
         <span className="h-2 w-2 rounded-full bg-[#FFBD2E]" />
         <span className="h-2 w-2 rounded-full bg-[#27C93F]" />
-        <span className="ml-2 text-[10px] text-white/40">{filename}</span>
+        <span className="ml-2 text-[10px] text-white/40 truncate">
+          {filename}
+        </span>
       </div>
-
-      <div className="p-3">
-        {rows.map((row, i) => (
-          <div key={i} className="leading-relaxed whitespace-pre">
-            {highlight(row)}
-            {i === lineIndex && !showResult && (
-              <span className="inline-block w-1.5 h-3 -mb-0.5 ml-0.5 bg-white/70 animate-pulse" />
+      <div
+        className={`p-3 space-y-0.5 flex-1 transition-opacity duration-300 ${
+          fading ? "opacity-0" : "opacity-100"
+        }`}
+      >
+        {displayedLines.map((line, i) => (
+          <div key={i} className="whitespace-pre-wrap leading-relaxed">
+            {line}
+            {isTyping && !fading && i === displayedLines.length - 1 && (
+              <span className="inline-block w-[6px] h-[1em] align-middle ml-0.5 bg-[#EDEDED] animate-pulse" />
             )}
           </div>
         ))}
-
         {resultLine && (
           <div
-            className={`mt-1 text-[#27C93F] transition-opacity duration-300 ${
-              showResult ? "opacity-100" : "opacity-0"
+            className={`pt-2 mt-2 border-t border-white/10 text-[#27C93F] transition-opacity duration-500 ${
+              showResult && !fading ? "opacity-100" : "opacity-0"
             }`}
           >
-            {showResult ? resultLine : "\u00A0"}
+            {resultLine}
           </div>
         )}
       </div>
