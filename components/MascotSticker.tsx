@@ -76,7 +76,7 @@ export default function MascotSticker() {
   return (
     <div
       aria-hidden={!visible}
-      className={`fixed bottom-0 left-2 sm:left-4 z-40 hidden sm:block transition-all duration-500 ${
+      className={`fixed bottom-0 left-2 sm:left-4 z-40 block transition-all duration-500 ${
         visible
           ? "opacity-100 translate-y-0"
           : "opacity-0 translate-y-6 pointer-events-none"
