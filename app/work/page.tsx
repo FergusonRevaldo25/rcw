@@ -30,10 +30,10 @@ const projects: Project[] = [
 export default function WorkPage() {
   return (
     <section className="container-page py-20">
-      <h1 className="text-4xl font-bold mb-4">
+      <h1 className="text-4xl font-bold mb-4 text-center mx-auto">
         Templates Build for Showcasing
       </h1>
-      <p className="text-[var(--color-muted)] max-w-lg mb-12">
+      <p className="text-[var(--color-muted)] max-w-lg mb-12 mx-auto">
         "Standard Boring Templates I know , why dont you make them better?"
       </p>
 

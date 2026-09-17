@@ -131,16 +131,16 @@ export default function BehindTheScenesPage() {
   return (
     <>
       <section className="container-page pt-20 pb-12">
-        <p className="text-sm text-[var(--color-muted)] mb-3">
+        <p className="text-sm text-[var(--color-muted)] mb-3 text-center mx-auto">
           How a site actually gets built
         </p>
-        <h1 className="text-4xl md:text-5xl font-bold max-w-2xl mb-6">
+        <h1 className="text-4xl md:text-5xl font-bold max-w-2xl mb-6 text-center mx-auto">
           Behind the scenes
         </h1>
-        <p className="text-[var(--color-muted)] max-w-lg">
+        <p className="text-[var(--color-muted)] max-w-lg mx-auto">
           Not a black box. Here&apos;s what&apos;s actually happening between
-          &quot;let&apos;s do this&quot; and your site going live — the code,
-          the infrastructure, and the parts most agencies don&apos;t show you.
+          &quot;let&apos;s do this&quot; and your site going live the code, the
+          infrastructure, and the parts most agencies don&apos;t show you.
         </p>
       </section>
       <ProjectTimeline />

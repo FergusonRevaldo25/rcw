@@ -141,9 +141,11 @@ export default function CustomizePage() {
 
   return (
     <section className="container-page py-20 max-w-3xl">
-      <h1 className="text-4xl font-bold mb-3">Customize your site</h1>
-      <p className="text-[var(--color-muted)] mb-14 max-w-xl">
-        Tick what you like below. There's no wrong answer — this just gives us a
+      <h1 className="text-4xl font-bold mb-3 text-center">
+        Customize your site
+      </h1>
+      <p className="text-[var(--color-muted)] mb-14 max-w-xl mx-auto">
+        Tick what you like below. There's no wrong answer this just gives us a
         starting point so the first design we show you is already close to what
         you want. Whatever you pick here comes through automatically when you
         get in touch on the next page.

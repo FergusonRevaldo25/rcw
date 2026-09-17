@@ -29,9 +29,9 @@ const services = [
 export default function ServicesPage() {
   return (
     <section className="container-page py-20">
-      <h1 className="text-4xl font-bold mb-4">Services</h1>
-      <p className="text-[var(--color-muted)] max-w-lg mb-12">
-        Everything below can be mixed and matched to fit your budget — use the
+      <h1 className="text-4xl font-bold mb-4 text-center">Services</h1>
+      <p className="text-[var(--color-muted)] max-w-lg mb-12 text-center mx-auto">
+        Everything below can be mixed and matched to fit your budget use the
         budget slider on the home page to see what fits.
       </p>
 
@@ -51,7 +51,7 @@ export default function ServicesPage() {
         ))}
       </div>
 
-      <a href="/contact" className="btn-primary mt-12 inline-flex">
+      <a href="/contact" className="btn-primary mt-12 flex w-fit mx-auto">
         Get a quote
       </a>
     </section>
