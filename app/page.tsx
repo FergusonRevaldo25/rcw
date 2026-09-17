@@ -5,6 +5,7 @@ import ProcessSteps from "@/components/ProcessSteps";
 import FeaturedProjects from "@/components/FeaturedProjects";
 import ClientLogos from "@/components/ClientLogos";
 import MascotSticker from "@/components/MascotSticker";
+import TopRightMascotPeek from "@/components/TopRightMascotPeek";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <FeaturedProjects />
       <ClientLogos />
       <MascotSticker />
+      <TopRightMascotPeek />
     </>
   );
 }
