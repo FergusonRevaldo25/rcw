@@ -2,26 +2,13 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
-/**
- * Generic fan/arc carousel engine.
- *
- * Cards are arranged in a shallow arc around a centered "active" card:
- * further cards rotate more, shrink, drop lower, and fade out — producing
- * the spread-deck-of-cards look rather than a straight sideways slide.
- *
- * This file exports:
- *   - `FanCarousel`  (named) — generic engine, pass your own `renderCard`.
- *   - `SocialCards`  (default) — a ready-made photo version matching the
- *      `cards={[{ imgUrl, alt }]}` API.
- */
-
 export type FanCarouselProps<T> = {
   items: T[];
   renderCard: (item: T, index: number, isActive: boolean) => ReactNode;
   caption?: (item: T, index: number) => ReactNode;
   cardWidth?: number;
   cardHeight?: number;
-  autoplayMs?: number; // 0 disables autoplay
+  autoplayMs?: number;
   ariaLabel?: (item: T, index: number) => string;
 };
 
@@ -38,24 +25,41 @@ export function FanCarousel<T>({
   const [paused, setPaused] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  const [reduceMotion, setReduceMotion] = useState(false);
   useEffect(() => {
-    if (paused || autoplayMs <= 0 || items.length <= 1) return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduceMotion(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setReduceMotion(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  useEffect(() => {
+    if (paused || autoplayMs <= 0 || items.length <= 1 || reduceMotion) return;
+
     timerRef.current = setInterval(() => {
       setActive((i) => (i + 1) % items.length);
     }, autoplayMs);
+
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [paused, autoplayMs, items.length]);
+  }, [paused, autoplayMs, items.length, reduceMotion]);
 
   function goTo(i: number) {
     setActive(((i % items.length) + items.length) % items.length);
   }
 
-  // How far (in px) the furthest visible card sits below the active one —
-  // used to size the container so nothing clips.
-  const maxArcDrop = Math.pow(Math.min(items.length - 1, 4), 1.6) * 6;
-  const containerHeight = cardHeight + maxArcDrop + 40;
+  // Gentler vertical arc
+  const maxAbs = Math.min(items.length - 1, 4);
+  const maxArcDrop = Math.pow(maxAbs, 1.4) * 5;
+  const containerHeight = cardHeight + maxArcDrop + 28;
+
+  // How far the outermost card will travel horizontally
+  const maxOffset = Math.min(items.length - 1, 4);
+  const maxTranslateX = maxOffset * cardWidth * 0.42;
+  // Extra padding so the side cards are never clipped
+  const sidePadding = maxTranslateX + cardWidth * 0.15;
 
   return (
     <div
@@ -64,23 +68,27 @@ export function FanCarousel<T>({
     >
       <div
         className="relative mx-auto"
-        style={{ height: containerHeight, perspective: 1400 }}
+        style={{
+          height: containerHeight,
+          perspective: reduceMotion ? "none" : 1400,
+          // This is the important part – gives the fan room to breathe
+          paddingLeft: sidePadding,
+          paddingRight: sidePadding,
+          marginLeft: -sidePadding,
+          marginRight: -sidePadding,
+        }}
       >
         {items.map((item, i) => {
           const offset = i - active;
           const abs = Math.abs(offset);
           const isActive = offset === 0;
+          const isVisible = abs <= 4; // hide cards that are too far
 
-          // Cards more than this far from center are fully faded/inert —
-          // still mounted (so autoplay/dot-jump transitions stay smooth)
-          // but invisible and non-interactive.
-          const isVisible = abs <= 5;
-
-          const rotate = offset * 9; // degrees
-          const translateX = offset * cardWidth * 0.58;
-          const translateY = Math.pow(abs, 1.6) * 6; // arcs downward at the edges
-          const scale = Math.max(1 - abs * 0.12, 0.5);
-          const opacity = Math.max(1 - abs * 0.26, 0);
+          const rotate = reduceMotion ? 0 : offset * 7.5;
+          const translateX = offset * cardWidth * 0.42; // ← reduced spread
+          const translateY = reduceMotion ? 0 : Math.pow(abs, 1.4) * 5;
+          const scale = Math.max(1 - abs * 0.13, 0.58); // stronger shrink
+          const opacity = Math.max(1 - abs * 0.24, 0);
 
           return (
             <button
@@ -91,7 +99,7 @@ export function FanCarousel<T>({
                 ariaLabel ? ariaLabel(item, i) : `Go to slide ${i + 1}`
               }
               aria-current={isActive}
-              className="absolute top-0 left-1/2 rounded-2xl overflow-hidden shadow-xl transition-[transform,opacity] duration-500 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="absolute top-0 left-1/2 rounded-2xl overflow-hidden shadow-xl transition-[transform,opacity] duration-500 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/40"
               style={{
                 width: cardWidth,
                 height: cardHeight,
@@ -103,7 +111,9 @@ export function FanCarousel<T>({
                 cursor: isActive ? "default" : "pointer",
               }}
             >
-              {renderCard(item, i, isActive)}
+              <div className="relative w-full h-full bg-transparent">
+                {renderCard(item, i, isActive)}
+              </div>
             </button>
           );
         })}
@@ -174,36 +184,5 @@ export function FanCarousel<T>({
         </div>
       </div>
     </div>
-  );
-}
-
-// ---------------------------------------------------------------------
-// Ready-made photo version — matches the `cards={[{ imgUrl, alt }]}` API
-// from the demo snippet. Drop this in as-is to test the effect with
-// plain images before wiring in anything more custom.
-// ---------------------------------------------------------------------
-
-export type SocialCard = {
-  imgUrl: string;
-  alt: string;
-};
-
-export default function SocialCards({ cards }: { cards: SocialCard[] }) {
-  return (
-    <FanCarousel
-      items={cards}
-      cardWidth={280}
-      cardHeight={380}
-      ariaLabel={(card) => card.alt}
-      renderCard={(card) => (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={card.imgUrl}
-          alt={card.alt}
-          className="w-full h-full object-cover"
-          draggable={false}
-        />
-      )}
-    />
   );
 }

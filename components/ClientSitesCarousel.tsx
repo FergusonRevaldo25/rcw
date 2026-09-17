@@ -65,7 +65,7 @@ const SLIDES: Slide[] = [
 
 export default function ClientSitesCarousel() {
   return (
-    <section className="container-page py-20 border-t border-black/10">
+    <section className="container-page py-20 border-t border-black/10 overflow-x-hidden">
       <div className="mb-10">
         <h2 className="text-3xl font-bold">Sites we've built</h2>
       </div>
@@ -93,6 +93,7 @@ export default function ClientSitesCarousel() {
                   src={slide.url}
                   title={slide.clientName}
                   loading="lazy"
+                  scrolling="no"
                   style={{
                     position: "absolute",
                     top: 0,

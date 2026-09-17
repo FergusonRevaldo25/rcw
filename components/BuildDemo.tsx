@@ -21,11 +21,11 @@ const CODE_LINES = [
 ];
 
 const TERMINAL_LINES = [
-  "$ npm run build",
+  "\$ npm run build",
   "✓ Compiled successfully in 842ms",
-  "$ git add .",
-  '$ git commit -m "feat: launch cornercoffee.co.za"',
-  "$ git push origin main",
+  "\$ git add .",
+  '\$ git commit -m "feat: launch cornercoffee.co.za"',
+  "\$ git push origin main",
   "✓ Deployed to production — live in 12s",
 ];
 
@@ -145,7 +145,7 @@ export default function BuildDemo() {
 
   return (
     <section className="container-page py-20 border-t border-black/10">
-      <div className="grid md:grid-cols-2 gap-10 items-center">
+      <div className="grid md:grid-cols-2 gap-5 items-center">
         <div>
           <h2 className="text-3xl font-bold mb-4">
             Actually <span className="gradient-text">hand-coded</span>.
@@ -158,8 +158,9 @@ export default function BuildDemo() {
           </p>
         </div>
 
-        <div className="gradient-ring rounded-2xl overflow-hidden bg-[#0A0A0A] text-[#EDEDED] font-mono text-sm shadow-xl">
-          <div className="flex items-center gap-1.5 px-4 py-3 border-b border-white/10">
+        {/* Added w-fit and md:justify-self-start below */}
+        <div className="w-fit md:justify-self-start gradient-ring rounded-2xl overflow-hidden bg-[#0A0A0A] text-[#EDEDED] font-mono text-sm shadow-xl">
+          <div className="flex items-center gap-1.5 px-2 py-3 border-b border-white/10">
             <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F56]" />
             <span className="h-2.5 w-2.5 rounded-full bg-[#FFBD2E]" />
             <span className="h-2.5 w-2.5 rounded-full bg-[#27C93F]" />
