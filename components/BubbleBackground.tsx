@@ -7,12 +7,12 @@ export default function BubbleBackground() {
       <img
         src="/liquid_bubble.png"
         alt=""
-        className="absolute -left-40 -top-24 w-[520px] max-w-none opacity-60 lg:opacity-80 animate-float-a"
+        className="lava-blob lava-blob-1 -left-40 -top-24 w-[520px] max-w-none opacity-60 lg:opacity-80"
       />
       <img
         src="/liquid_bubble.png"
         alt=""
-        className="absolute -right-40 bottom-[-10%] w-[520px] max-w-none scale-x-[-1] opacity-60 lg:opacity-80 animate-float-b"
+        className="lava-blob lava-blob-2 -right-40 bottom-[-10%] w-[520px] max-w-none opacity-60 lg:opacity-80"
       />
     </div>
   );
