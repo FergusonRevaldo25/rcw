@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useSiteConfig } from "@/lib/site-config";
 
@@ -118,8 +119,20 @@ export default function BudgetBar() {
         <ul className="space-y-1.5 max-h-48 overflow-y-auto no-scrollbar pr-1">
           {unlockedFeatures.map((f) => (
             <li key={f.label} className="flex items-center gap-2 text-sm">
-              <svg width="14" height="14" viewBox="0 0 12 12" fill="none" className="shrink-0 text-[var(--color-magenta)]">
-                <path d="M2 6l2.5 2.5L10 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 12 12"
+                fill="none"
+                className="shrink-0 text-[var(--color-magenta)]"
+              >
+                <path
+                  d="M2 6l2.5 2.5L10 3"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
               {f.label}
             </li>
@@ -129,22 +142,24 @@ export default function BudgetBar() {
         {nextFeature && (
           <p className="mt-3 text-xs text-[var(--color-muted)]">
             +{formatRand(nextFeature.min - budget)} unlocks:{" "}
-            <span className="font-medium text-[var(--color-fg)]">{nextFeature.label}</span>
+            <span className="font-medium text-[var(--color-fg)]">
+              {nextFeature.label}
+            </span>
           </p>
         )}
 
-        <a href="/contact" className="btn-primary mt-6 inline-flex">
+        <Link href="/contact" className="btn-primary mt-6 inline-flex">
           Get this quote
-        </a>
+        </Link>
       </div>
 
       <p className="mt-6 text-xs text-[var(--color-muted)] border-t border-black/10 pt-4">
         This is a once-off build cost. Your domain (renewed yearly, price
-        depends on which one you pick) and any support after launch are
-        billed separately —{" "}
-        <a href="/faq" className="underline hover:text-[var(--color-fg)]">
+        depends on which one you pick) and any support after launch are billed
+        separately —{" "}
+        <Link href="/faq" className="underline hover:text-[var(--color-fg)]">
           see the FAQ
-        </a>{" "}
+        </Link>{" "}
         for how that works.
       </p>
     </div>
