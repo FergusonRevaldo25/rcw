@@ -1,26 +1,223 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-bg: #dad5d2;
+  --color-bg-raised: #cdc7c4;
+  --color-fg: #14100f;
+  --color-muted: #6b6461;
+  --color-border: rgba(20, 16, 15, 0.1);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Instagram-flow palette */
+  --color-purple: #833ab4;
+  --color-magenta: #e1306c;
+  --color-orange: #f77737;
+  --color-yellow: #fcaf45;
+
+  --font-display: "Clash Display", "Arial Black", sans-serif;
+  --font-body: "Satoshi", ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.gradient-accent {
+  background: linear-gradient(
+    135deg,
+    var(--color-purple) 0%,
+    var(--color-magenta) 40%,
+    var(--color-orange) 70%,
+    var(--color-yellow) 100%
+  );
+}
+
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    var(--color-purple) 0%,
+    var(--color-magenta) 45%,
+    var(--color-orange) 75%,
+    var(--color-yellow) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gradient-ring {
+  position: relative;
+}
+
+.gradient-ring::before {
+  content: "";
+  position: absolute;
+  inset: -1.5px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(
+    135deg,
+    var(--color-purple),
+    var(--color-magenta),
+    var(--color-orange),
+    var(--color-yellow)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.container-page {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+/* Very faint on-brand tint behind the sticky nav — enough to feel
+   intentional, not enough to compete with nav text/links for attention. */
+.nav-gradient-wash {
+  background:
+    linear-gradient(
+      120deg,
+      rgba(131, 58, 180, 0.05) 0%,
+      rgba(225, 48, 108, 0.04) 35%,
+      rgba(247, 119, 55, 0.04) 65%,
+      rgba(252, 175, 69, 0.05) 100%
+    ),
+    var(--color-bg);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  color: #ffffff;
+  background: linear-gradient(
+    135deg,
+    var(--color-purple) 0%,
+    var(--color-magenta) 45%,
+    var(--color-orange) 75%,
+    var(--color-yellow) 100%
+  );
+  transition: filter 0.15s ease;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.08) saturate(1.1);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--color-magenta);
+  outline-offset: 3px;
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.7rem;
+  border-radius: 999px;
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+  color: var(--color-fg);
+  transition: border-color 0.15s ease;
+}
+
+.btn-outline:hover {
+  border-color: var(--color-magenta);
+}
+
+/* Budget bar: track always shows the full gradient flow */
+.gradient-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--color-purple) 0%,
+    var(--color-magenta) 40%,
+    var(--color-orange) 70%,
+    var(--color-yellow) 100%
+  );
+  cursor: pointer;
+}
+
+.gradient-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid var(--color-magenta);
+  box-shadow: 0 1px 4px rgba(20, 16, 15, 0.25);
+}
+
+.gradient-range::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid var(--color-magenta);
+  box-shadow: 0 1px 4px rgba(20, 16, 15, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Slow, gentle drift for the background bubble decorations. Kept subtle —
+   this runs behind every page, so it should read as ambient texture, not
+   something that draws the eye. */
+@keyframes float-a {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(18px, 24px) rotate(4deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+@keyframes float-b {
+  0% {
+    transform: scaleX(-1) translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: scaleX(-1) translate(-22px, -18px) rotate(-4deg);
+  }
+  100% {
+    transform: scaleX(-1) translate(0, 0) rotate(0deg);
+  }
+}
+
+.animate-float-a {
+  animation: float-a 14s ease-in-out infinite;
+}
+
+.animate-float-b {
+  animation: float-b 16s ease-in-out infinite;
+  animation-delay: -4s;
 }
