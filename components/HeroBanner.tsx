@@ -16,9 +16,9 @@ export default function HeroBanner() {
         <div className="grid md:grid-cols-2 gap-12 items-start">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold leading-[1.05] mb-6">
-              A website built for
+              Websites designed to
               <br />
-              your <span className="gradient-text">actual business</span>.
+              your <span className="gradient-text">Standards</span>.
             </h1>
             <p className="text-[var(--color-muted)] text-lg max-w-md mb-8">
               No templates pretending to be custom. RCW designs and builds sites
@@ -30,7 +30,7 @@ export default function HeroBanner() {
                 Get a quote
               </a>
               <a href="/work" className="btn-outline">
-                See our work
+                See my work
               </a>
             </div>
           </div>

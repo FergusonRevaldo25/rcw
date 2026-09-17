@@ -151,10 +151,11 @@ export default function BuildDemo() {
             Actually <span className="gradient-text">hand-coded</span>.
           </h2>
           <p className="text-[var(--color-muted)] max-w-md">
-            No drag-and-drop template, no AI output pretending to be custom.
-            Every site is written and built line by line — here's roughly what
-            that looks like from the inside, from first component to production
-            deploy.
+            I write every line. I also use Claude to review it, catch bugs, and
+            flag things I'd otherwise miss which is the honest version of
+            "hand-coded" in 2026. No drag-and-drop templates, no AI output
+            pretending to be custom. Here's roughly what that looks like from
+            the inside, from first component to production deploy.
           </p>
         </div>
 
