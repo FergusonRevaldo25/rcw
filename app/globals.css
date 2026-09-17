@@ -179,6 +179,15 @@ h4 {
   box-shadow: 0 1px 4px rgba(20, 16, 15, 0.25);
 }
 
+/* Scrollable but no visible scrollbar — used on the Budget Bar checklist */
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* old Edge/IE */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, new Edge */
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -186,38 +195,86 @@ h4 {
   }
 }
 
-/* Slow, gentle drift for the background bubble decorations. Kept subtle —
-   this runs behind every page, so it should read as ambient texture, not
-   something that draws the eye. */
-@keyframes float-a {
-  0% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  50% {
-    transform: translate(18px, 24px) rotate(4deg);
-  }
-  100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
+/* ---- Behind-the-scenes card animations ---- */
+
+@keyframes anim-rise-fade {
+  0%, 100% { transform: translateY(6px); opacity: 0.4; }
+  50% { transform: translateY(-2px); opacity: 1; }
+}
+.anim-rise {
+  animation: anim-rise-fade 2.2s ease-in-out infinite;
 }
 
-@keyframes float-b {
-  0% {
-    transform: scaleX(-1) translate(0, 0) rotate(0deg);
-  }
-  50% {
-    transform: scaleX(-1) translate(-22px, -18px) rotate(-4deg);
-  }
-  100% {
-    transform: scaleX(-1) translate(0, 0) rotate(0deg);
-  }
+@keyframes anim-heartbeat-draw {
+  to { stroke-dashoffset: 0; }
+}
+.anim-heartbeat {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: anim-heartbeat-draw 2s linear infinite;
 }
 
-.animate-float-a {
-  animation: float-a 14s ease-in-out infinite;
+@keyframes anim-dot-bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-4px); opacity: 1; }
+}
+.anim-dot {
+  animation: anim-dot-bounce 1.2s ease-in-out infinite;
 }
 
-.animate-float-b {
-  animation: float-b 16s ease-in-out infinite;
-  animation-delay: -4s;
+@keyframes anim-shimmer-move {
+  0% { background-position: -120% 0; }
+  100% { background-position: 220% 0; }
 }
+.anim-shimmer {
+  background-image: linear-gradient(110deg, transparent 40%, rgba(20, 16, 15, 0.35) 50%, transparent 60%);
+  background-size: 200% 100%;
+  animation: anim-shimmer-move 2.4s ease-in-out infinite;
+}
+
+@keyframes anim-plane-fly {
+  0% { transform: translate(-6px, 3px); opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translate(20px, -6px); opacity: 0; }
+}
+.anim-plane {
+  animation: anim-plane-fly 2.4s ease-in-out infinite;
+}
+
+@keyframes anim-deploy-pulse {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  70% { transform: scale(1.7); opacity: 0; }
+  100% { opacity: 0; }
+}
+.anim-deploy-ring {
+  animation: anim-deploy-pulse 1.8s ease-out infinite;
+}
+
+/* ---- Lava-lamp liquid bubble background ---- */
+
+body {
+  overflow-x: hidden; /* the blobs intentionally bleed past the viewport edge */
+}
+
+.lava-blob {
+  position: fixed;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  height: auto;
+}
+
+@keyframes lava-drift-a {
+  0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  50% { transform: translate(22px, -26px) rotate(8deg) scale(1.06); }
+}
+@keyframes lava-drift-b {
+  0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  50% { transform: translate(-20px, 24px) rotate(-7deg) scale(0.96); }
+}
+
+.lava-blob-1 { animation: lava-drift-a 15s ease-in-out infinite; }
+.lava-blob-2 { animation: lava-drift-b 18s ease-in-out infinite; }
+.lava-blob-3 { animation: lava-drift-a 21s ease-in-out infinite reverse; }
+.lava-blob-4 { animation: lava-drift-b 17s ease-in-out infinite reverse; }

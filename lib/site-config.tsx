@@ -11,6 +11,7 @@ type SiteConfig = {
   domainIdea: string;
   budget: number | null;
   tierLabel: string | null;
+  budgetFeatures: string[];
 };
 
 const defaultConfig: SiteConfig = {
@@ -22,6 +23,7 @@ const defaultConfig: SiteConfig = {
   domainIdea: "",
   budget: null,
   tierLabel: null,
+  budgetFeatures: [],
 };
 
 type SiteConfigContextValue = SiteConfig & {

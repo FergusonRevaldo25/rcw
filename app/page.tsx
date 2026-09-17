@@ -3,7 +3,7 @@ import BuildDemo from "@/components/BuildDemo";
 import ClientSitesCarousel from "@/components/ClientSitesCarousel";
 import ProcessSteps from "@/components/ProcessSteps";
 import FeaturedProjects from "@/components/FeaturedProjects";
-import ClientLogos from "@/components/ClientLogos";
+import MobileAppsSection from "@/components/MobileAppsSection";
 import MascotSticker from "@/components/MascotSticker";
 import TopRightMascotPeek from "@/components/TopRightMascotPeek";
 
@@ -15,7 +15,7 @@ export default function Home() {
       <ClientSitesCarousel />
       <ProcessSteps />
       <FeaturedProjects />
-      <ClientLogos />
+      <MobileAppsSection />
       <MascotSticker />
       <TopRightMascotPeek />
     </>

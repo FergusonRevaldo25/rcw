@@ -42,7 +42,9 @@ function ColorRolePicker({
               aria-label={s.label}
               title={s.label}
               className={`relative h-11 w-11 rounded-full border transition-transform ${
-                isSelected ? "border-[var(--color-magenta)] scale-110" : "border-black/15"
+                isSelected
+                  ? "border-[var(--color-magenta)] scale-110"
+                  : "border-black/15"
               }`}
               style={{ background: s.hex }}
             >
@@ -51,7 +53,11 @@ function ColorRolePicker({
                   <svg width="16" height="16" viewBox="0 0 12 12" fill="none">
                     <path
                       d="M2 6l2.5 2.5L10 3"
-                      stroke={s.hex === "#FFFFFF" || s.hex === "#F4EFE9" ? "#0A0A0A" : "#FFFFFF"}
+                      stroke={
+                        s.hex === "#FFFFFF" || s.hex === "#F4EFE9"
+                          ? "#0A0A0A"
+                          : "#FFFFFF"
+                      }
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -104,12 +110,20 @@ function OptionGrid({
               >
                 {isSelected && (
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <path d="M2 6l2.5 2.5L10 3" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M2 6l2.5 2.5L10 3"
+                      stroke="white"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 )}
               </span>
             </div>
-            <p className="text-sm text-[var(--color-muted)]">{opt.description}</p>
+            <p className="text-sm text-[var(--color-muted)]">
+              {opt.description}
+            </p>
           </button>
         );
       })}
@@ -118,7 +132,8 @@ function OptionGrid({
 }
 
 export default function CustomizePage() {
-  const { primary, secondary, accent, background, images, domainIdea, update } = useSiteConfig();
+  const { primary, secondary, accent, background, images, domainIdea, update } =
+    useSiteConfig();
 
   const previewColors = [primary, secondary, accent]
     .map(swatchHex)
@@ -128,19 +143,19 @@ export default function CustomizePage() {
     <section className="container-page py-20 max-w-3xl">
       <h1 className="text-4xl font-bold mb-3">Customize your site</h1>
       <p className="text-[var(--color-muted)] mb-14 max-w-xl">
-        Tick what you like below. There's no wrong answer — this just gives
-        us a starting point so the first design we show you is already
-        close to what you want. Whatever you pick here comes through
-        automatically when you get in touch on the next page.
+        Tick what you like below. There's no wrong answer — this just gives us a
+        starting point so the first design we show you is already close to what
+        you want. Whatever you pick here comes through automatically when you
+        get in touch on the next page.
       </p>
 
       <div className="space-y-14">
         <div>
           <h2 className="text-2xl font-bold mb-1">Colours</h2>
           <p className="text-sm text-[var(--color-muted)] mb-8">
-            Build your own combination by picking a colour for each role.
-            Every colour we offer is shown for each one, so you have the
-            full range every time.
+            Build your own combination by picking a colour for each role. Every
+            colour we offer is shown for each one, so you have the full range
+            every time.
           </p>
 
           {previewColors.length > 0 && (
@@ -156,19 +171,21 @@ export default function CustomizePage() {
               role="Primary colour"
               helper="The main colour — used for backgrounds or the largest areas of the site."
               selected={primary}
-              onSelect={(id) => update({ primary: id })}
+              onSelect={(id) => update({ primary: primary === id ? null : id })}
             />
             <ColorRolePicker
               role="Secondary colour"
               helper="Supports the primary colour — used for sections, cards, or text."
               selected={secondary}
-              onSelect={(id) => update({ secondary: id })}
+              onSelect={(id) =>
+                update({ secondary: secondary === id ? null : id })
+              }
             />
             <ColorRolePicker
               role="Accent colour"
               helper="Used sparingly, for buttons, links, and anything that should stand out."
               selected={accent}
-              onSelect={(id) => update({ accent: id })}
+              onSelect={(id) => update({ accent: accent === id ? null : id })}
             />
           </div>
         </div>
@@ -181,7 +198,9 @@ export default function CustomizePage() {
           <OptionGrid
             options={BACKGROUND_STYLES}
             selected={background}
-            onSelect={(id) => update({ background: id })}
+            onSelect={(id) =>
+              update({ background: background === id ? null : id })
+            }
           />
         </div>
 
@@ -193,7 +212,7 @@ export default function CustomizePage() {
           <OptionGrid
             options={IMAGE_OPTIONS}
             selected={images}
-            onSelect={(id) => update({ images: id })}
+            onSelect={(id) => update({ images: images === id ? null : id })}
           />
         </div>
 
@@ -201,35 +220,42 @@ export default function CustomizePage() {
           <h2 className="text-2xl font-bold mb-3">Your domain name</h2>
           <p className="text-sm mb-4 max-w-xl">
             A domain is the web address people type to find your site —
-            something like <span className="font-medium">www.yourbusiness.co.za</span>.
-            You don't need to know anything technical here. Just tell us
-            what you'd like, and we'll take it from there.
+            something like{" "}
+            <span className="font-medium">www.yourbusiness.co.za</span>. You
+            don't need to know anything technical here. Just tell us what you'd
+            like, and we'll take it from there.
           </p>
 
           <div className="space-y-3 text-sm mb-6">
             <p>
-              <span className="font-semibold">We do the searching for you.</span>{" "}
-              Once you tell us your first choice, we check whether it's free
-              to register.
+              <span className="font-semibold">
+                We do the searching for you.
+              </span>{" "}
+              Once you tell us your first choice, we check whether it's free to
+              register.
             </p>
             <p>
-              <span className="font-semibold">Availability isn't guaranteed.</span>{" "}
+              <span className="font-semibold">
+                Availability isn't guaranteed.
+              </span>{" "}
               Domain names are taken on a first-come, first-served basis, so
-              sometimes your first choice is already registered by someone
-              else. This is normal and out of our control.
+              sometimes your first choice is already registered by someone else.
+              This is normal and out of our control.
             </p>
             <p>
               <span className="font-semibold">You'll always have options.</span>{" "}
               If your first choice is taken, we'll bring you 2–3 close
-              alternatives to choose from before we register anything —
-              nothing gets bought without you agreeing to it first.
+              alternatives to choose from before we register anything — nothing
+              gets bought without you agreeing to it first.
             </p>
             <p>
-              <span className="font-semibold">It's a yearly cost, separate from the build.</span>{" "}
-              A domain isn't a once-off purchase — it's rented for a year at
-              a time and needs to be renewed annually to keep your site
-              live. This is a normal part of owning a website and applies no
-              matter who builds your site, not just with us.
+              <span className="font-semibold">
+                It's a yearly cost, separate from the build.
+              </span>{" "}
+              A domain isn't a once-off purchase — it's rented for a year at a
+              time and needs to be renewed annually to keep your site live. This
+              is a normal part of owning a website and applies no matter who
+              builds your site, not just with us.
             </p>
           </div>
 

@@ -20,9 +20,11 @@ function formatRand(value: number) {
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [sentVia, setSentVia] = useState<"whatsapp" | "email" | null>(null);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const { primary, secondary, accent, background, images, domainIdea, budget, tierLabel } =
+  const { primary, secondary, accent, background, images, domainIdea, budget, tierLabel, budgetFeatures } =
     useSiteConfig();
 
   const primaryLabel = swatchLabel(primary);
@@ -51,6 +53,10 @@ export default function ContactPage() {
 
     if (hasBudgetSelection) {
       lines.push("", "--- Budget ---", `${formatRand(budget!)} — ${tierLabel}`);
+      if (budgetFeatures.length > 0) {
+        lines.push("Included at this budget:");
+        budgetFeatures.forEach((f) => lines.push(`  • ${f}`));
+      }
     }
 
     if (hasCustomizeSelections) {
@@ -66,7 +72,7 @@ export default function ContactPage() {
     return lines.filter((l) => l !== null).join("\n");
   }
 
-  function handleSend(channel: "whatsapp" | "email") {
+  async function handleSend(channel: "whatsapp" | "email") {
     const form = formRef.current;
     if (!form || !form.reportValidity()) return;
 
@@ -76,17 +82,48 @@ export default function ContactPage() {
     if (channel === "whatsapp") {
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(messageBody)}`;
       window.open(url, "_blank", "noopener,noreferrer");
-    } else {
-      const subject = `Quote request — ${formData.get("business") || formData.get("name") || "New enquiry"}`;
-      // mailto opens the visitor's own email app with everything prefilled —
-      // no third-party account or API key needed, works everywhere today.
-      window.location.href = `mailto:hello@rcw.co.za?subject=${encodeURIComponent(
-        subject
-      )}&body=${encodeURIComponent(messageBody)}`;
+      setSentVia(channel);
+      setSubmitted(true);
+      return;
     }
 
-    setSentVia(channel);
-    setSubmitted(true);
+    // Real server-side send via /api/contact — reaches your inbox no
+    // matter what email setup the visitor's own device has (or doesn't
+    // have), unlike mailto which depended on that.
+    setSending(true);
+    setError(null);
+
+    const business = formData.get("business") as string;
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subject: `Quote request — ${business || name || "New enquiry"}`,
+          message: messageBody,
+          replyTo: email,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error || "Something went wrong sending this.");
+      }
+
+      setSentVia("email");
+      setSubmitted(true);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Couldn't send that — try WhatsApp instead, or check back shortly.",
+      );
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -100,16 +137,22 @@ export default function ContactPage() {
       {submitted ? (
         <div className="rounded-xl border border-black/10 bg-[var(--color-bg-raised)] p-6">
           <p className="font-semibold mb-1">
-            {sentVia === "whatsapp" ? "WhatsApp opened" : "Email app opened"}
+            {sentVia === "whatsapp" ? "WhatsApp opened" : "Message sent"}
           </p>
           <p className="text-sm text-[var(--color-muted)]">
             {sentVia === "whatsapp"
               ? "Your details, budget, and any Customize picks are already in the message — just hit send in WhatsApp."
-              : "Your details, budget, and any Customize picks are already in the draft — just hit send in your email app."}
+              : "It's landed in our inbox with your budget and any Customize picks attached. We'll reply within a day."}
           </p>
         </div>
       ) : (
         <>
+          {error && (
+            <div className="rounded-xl border border-[var(--color-magenta)]/30 bg-[var(--color-bg-raised)] p-4 mb-6 text-sm">
+              {error}
+            </div>
+          )}
+
           {(hasCustomizeSelections || hasBudgetSelection) && (
             <div className="rounded-xl border border-black/10 bg-[var(--color-bg-raised)] p-5 mb-8">
               <p className="text-sm font-semibold mb-3">
@@ -119,6 +162,11 @@ export default function ContactPage() {
                 {hasBudgetSelection && (
                   <li>
                     Budget: {formatRand(budget!)} — {tierLabel}
+                    {budgetFeatures.length > 0 && (
+                      <span className="block text-xs mt-0.5">
+                        {budgetFeatures.length} items included
+                      </span>
+                    )}
                   </li>
                 )}
                 {primaryLabel && <li>Primary colour: {primaryLabel}</li>}
@@ -184,9 +232,10 @@ export default function ContactPage() {
               <button
                 type="button"
                 onClick={() => handleSend("email")}
-                className="btn-outline flex-1 justify-center"
+                disabled={sending}
+                className="btn-outline flex-1 justify-center disabled:opacity-60"
               >
-                Send via email
+                {sending ? "Sending…" : "Send via email"}
               </button>
             </div>
           </form>
