@@ -4,7 +4,7 @@
   --color-bg: #dad5d2;
   --color-bg-raised: #cdc7c4;
   --color-fg: #14100f;
-  --color-muted: #6b6461;
+  --color-muted: #55504d;
   --color-border: rgba(20, 16, 15, 0.1);
 
   /* Instagram-flow palette */
@@ -198,15 +198,24 @@ h4 {
 /* ---- Behind-the-scenes card animations ---- */
 
 @keyframes anim-rise-fade {
-  0%, 100% { transform: translateY(6px); opacity: 0.4; }
-  50% { transform: translateY(-2px); opacity: 1; }
+  0%,
+  100% {
+    transform: translateY(6px);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-2px);
+    opacity: 1;
+  }
 }
 .anim-rise {
   animation: anim-rise-fade 2.2s ease-in-out infinite;
 }
 
 @keyframes anim-heartbeat-draw {
-  to { stroke-dashoffset: 0; }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 .anim-heartbeat {
   stroke-dasharray: 60;
@@ -215,37 +224,72 @@ h4 {
 }
 
 @keyframes anim-dot-bounce {
-  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
-  40% { transform: translateY(-4px); opacity: 1; }
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
 }
 .anim-dot {
   animation: anim-dot-bounce 1.2s ease-in-out infinite;
 }
 
 @keyframes anim-shimmer-move {
-  0% { background-position: -120% 0; }
-  100% { background-position: 220% 0; }
+  0% {
+    background-position: -120% 0;
+  }
+  100% {
+    background-position: 220% 0;
+  }
 }
 .anim-shimmer {
-  background-image: linear-gradient(110deg, transparent 40%, rgba(20, 16, 15, 0.35) 50%, transparent 60%);
+  background-image: linear-gradient(
+    110deg,
+    transparent 40%,
+    rgba(20, 16, 15, 0.35) 50%,
+    transparent 60%
+  );
   background-size: 200% 100%;
   animation: anim-shimmer-move 2.4s ease-in-out infinite;
 }
 
 @keyframes anim-plane-fly {
-  0% { transform: translate(-6px, 3px); opacity: 0; }
-  15% { opacity: 1; }
-  85% { opacity: 1; }
-  100% { transform: translate(20px, -6px); opacity: 0; }
+  0% {
+    transform: translate(-6px, 3px);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(20px, -6px);
+    opacity: 0;
+  }
 }
 .anim-plane {
   animation: anim-plane-fly 2.4s ease-in-out infinite;
 }
 
 @keyframes anim-deploy-pulse {
-  0% { transform: scale(0.9); opacity: 0.7; }
-  70% { transform: scale(1.7); opacity: 0; }
-  100% { opacity: 0; }
+  0% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 .anim-deploy-ring {
   animation: anim-deploy-pulse 1.8s ease-out infinite;
@@ -266,15 +310,33 @@ body {
 }
 
 @keyframes lava-drift-a {
-  0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
-  50% { transform: translate(22px, -26px) rotate(8deg) scale(1.06); }
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translate(22px, -26px) rotate(8deg) scale(1.06);
+  }
 }
 @keyframes lava-drift-b {
-  0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
-  50% { transform: translate(-20px, 24px) rotate(-7deg) scale(0.96); }
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translate(-20px, 24px) rotate(-7deg) scale(0.96);
+  }
 }
 
-.lava-blob-1 { animation: lava-drift-a 15s ease-in-out infinite; }
-.lava-blob-2 { animation: lava-drift-b 18s ease-in-out infinite; }
-.lava-blob-3 { animation: lava-drift-a 21s ease-in-out infinite reverse; }
-.lava-blob-4 { animation: lava-drift-b 17s ease-in-out infinite reverse; }
+.lava-blob-1 {
+  animation: lava-drift-a 15s ease-in-out infinite;
+}
+.lava-blob-2 {
+  animation: lava-drift-b 18s ease-in-out infinite;
+}
+.lava-blob-3 {
+  animation: lava-drift-a 21s ease-in-out infinite reverse;
+}
+.lava-blob-4 {
+  animation: lava-drift-b 17s ease-in-out infinite reverse;
+}

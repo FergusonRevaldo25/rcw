@@ -2,6 +2,13 @@
 // needed for these to show up. Muted/looping/autoplay so they play inline
 // without the visitor needing to click anything (browsers block autoplay
 // with sound, which is why muted is required here).
+//
+// Keep these files small — short clips, low resolution, heavily
+// compressed. Four autoplaying videos on the home page adds directly to
+// page weight and load time the same way the client-site carousel's
+// iframes did; there's no lazy-load trick that helps once a video is set
+// to autoplay, so the fix here has to be the files themselves staying
+// tiny (aim for well under 1MB each).
 const projects = [
   { name: "Corner Coffee Co.", type: "Cafe · booking site", video: "/v1.mp4" },
   {
@@ -40,9 +47,22 @@ export default function FeaturedProjects() {
               muted
               loop
               playsInline
-              aria-label={`${project.name} — ${project.type}`}
+              preload="metadata"
+              aria-label="Website build preview clip"
               className="absolute inset-0 w-full h-full object-cover"
-            />
+            >
+              {/* Silent clips, no dialogue — this empty track exists so
+                  the video passes accessibility checks that look for a
+                  captions track, without fabricating captions for audio
+                  that doesn't exist. */}
+              <track
+                kind="captions"
+                srcLang="en"
+                label="No spoken audio"
+                src="/captions-empty.vtt"
+                default
+              />
+            </video>
           </div>
         ))}
       </div>
