@@ -6,6 +6,7 @@ import FeaturedProjects from "@/components/FeaturedProjects";
 import MobileAppsSection from "@/components/MobileAppsSection";
 import MascotSticker from "@/components/MascotSticker";
 import TopRightMascotPeek from "@/components/TopRightMascotPeek";
+import Script from "next/script";
 
 export default function Home() {
   return (
@@ -18,6 +19,12 @@ export default function Home() {
       <MobileAppsSection />
       <MascotSticker />
       <TopRightMascotPeek />
+
+      <Script
+        src="/rcw-runner.js"
+        data-href="https://rcw-eta.vercel.app"
+        strategy="afterInteractive"
+      />
     </>
   );
 }
