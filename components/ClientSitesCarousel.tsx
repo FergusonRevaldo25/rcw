@@ -84,38 +84,51 @@ export default function ClientSitesCarousel() {
           </>
         )}
         renderCard={(slide, _index, isActive) => {
+          // Only the active card actually loads its iframe. With 5 live
+          // sites in this list, mounting all of them at once (regardless
+          // of which one is showing) was the single biggest contributor
+          // to page weight — each inactive card used to fetch an entire
+          // separate website nobody was looking at yet.
           if (slide.kind === "live" && slide.url) {
             return (
-              <div className="relative w-full h-full bg-[var(--color-bg-raised)]">
-                {/* Rendered at 2.5x size then scaled to 40% so the preview
-                    shows the whole page layout, not a zoomed-in corner. */}
-                <iframe
-                  src={slide.url}
-                  title={slide.clientName}
-                  loading="lazy"
-                  scrolling="no"
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "250%",
-                    height: "250%",
-                    border: 0,
-                    transform: "scale(0.4)",
-                    transformOrigin: "0 0",
-                    pointerEvents: "none",
-                  }}
-                />
-                {/* Only let the active (front) card link out — side cards in
-                    the fan are for clicking-to-select, not click-through. */}
-                {isActive && (
-                  <a
-                    href={slide.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Open ${slide.clientName} in a new tab`}
-                    className="absolute inset-0"
-                  />
+              <div className="relative w-full h-full bg-[var(--color-bg-raised)] flex items-center justify-center">
+                {isActive ? (
+                  <>
+                    {/* Rendered at 2.5x size then scaled to 40% so the
+                        preview shows the whole page layout, not a
+                        zoomed-in corner. */}
+                    <iframe
+                      src={slide.url}
+                      title={slide.clientName}
+                      loading="lazy"
+                      scrolling="no"
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "250%",
+                        height: "250%",
+                        border: 0,
+                        transform: "scale(0.4)",
+                        transformOrigin: "0 0",
+                        pointerEvents: "none",
+                      }}
+                    />
+                    <a
+                      href={slide.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Open ${slide.clientName} in a new tab`}
+                      className="absolute inset-0"
+                    />
+                  </>
+                ) : (
+                  // No network request at all until this card becomes
+                  // active — just the name, so the fan still reads fine
+                  // while scrolled past.
+                  <p className="text-sm font-medium text-[var(--color-muted)] px-4 text-center">
+                    {slide.clientName}
+                  </p>
                 )}
               </div>
             );
