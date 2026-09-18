@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   PALETTE,
   BACKGROUND_STYLES,
@@ -274,9 +275,9 @@ export default function CustomizePage() {
         </div>
 
         <div className="flex justify-end">
-          <a href="/contact" className="btn-primary">
+          <Link href="/contact" className="btn-primary">
             Continue to get a quote
-          </a>
+          </Link>
         </div>
       </div>
     </section>
