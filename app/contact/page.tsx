@@ -24,8 +24,17 @@ export default function ContactPage() {
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const { primary, secondary, accent, background, images, domainIdea, budget, tierLabel, budgetFeatures } =
-    useSiteConfig();
+  const {
+    primary,
+    secondary,
+    accent,
+    background,
+    images,
+    domainIdea,
+    budget,
+    tierLabel,
+    budgetFeatures,
+  } = useSiteConfig();
 
   const primaryLabel = swatchLabel(primary);
   const secondaryLabel = swatchLabel(secondary);
@@ -34,7 +43,12 @@ export default function ContactPage() {
   const imagesLabel = optionLabel(IMAGE_OPTIONS, images);
 
   const hasCustomizeSelections =
-    primaryLabel || secondaryLabel || accentLabel || backgroundLabel || imagesLabel || domainIdea;
+    primaryLabel ||
+    secondaryLabel ||
+    accentLabel ||
+    backgroundLabel ||
+    imagesLabel ||
+    domainIdea;
   const hasBudgetSelection = budget !== null && tierLabel;
 
   function buildMessage(formData: FormData) {
@@ -105,6 +119,8 @@ export default function ContactPage() {
           subject: `Quote request — ${business || name || "New enquiry"}`,
           message: messageBody,
           replyTo: email,
+          customerName: name,
+          honeypot: formData.get("company_website"),
         }),
       });
 
@@ -130,8 +146,8 @@ export default function ContactPage() {
     <section className="container-page py-20 max-w-xl">
       <h1 className="text-4xl font-bold mb-4">Get a quote</h1>
       <p className="text-[var(--color-muted)] mb-10">
-        Tell us about your business and what you need. We'll reply within a
-        day with a straight answer on cost and timeline.
+        Tell us about your business and what you need. We'll reply within a day
+        with a straight answer on cost and timeline.
       </p>
 
       {submitted ? (
@@ -142,7 +158,7 @@ export default function ContactPage() {
           <p className="text-sm text-[var(--color-muted)]">
             {sentVia === "whatsapp"
               ? "Your details, budget, and any Customize picks are already in the message — just hit send in WhatsApp."
-              : "It's landed in our inbox with your budget and any Customize picks attached. We'll reply within a day."}
+              : "It's landed in our inbox with your budget and any Customize picks attached. We'll reply within a day. Check your email for a confirmation with your reference number."}
           </p>
         </div>
       ) : (
@@ -172,7 +188,9 @@ export default function ContactPage() {
                 {primaryLabel && <li>Primary colour: {primaryLabel}</li>}
                 {secondaryLabel && <li>Secondary colour: {secondaryLabel}</li>}
                 {accentLabel && <li>Accent colour: {accentLabel}</li>}
-                {backgroundLabel && <li>Background style: {backgroundLabel}</li>}
+                {backgroundLabel && (
+                  <li>Background style: {backgroundLabel}</li>
+                )}
                 {imagesLabel && <li>Images: {imagesLabel}</li>}
                 {domainIdea && <li>Domain idea: {domainIdea}</li>}
               </ul>
@@ -180,8 +198,21 @@ export default function ContactPage() {
           )}
 
           <form ref={formRef} className="space-y-5">
+            {/* Honeypot field — hidden from real users via CSS, bots fill
+                it in. Checked server-side in /api/contact. */}
+            <input
+              type="text"
+              name="company_website"
+              tabIndex={-1}
+              autoComplete="off"
+              className="absolute -left-[9999px]"
+              aria-hidden="true"
+            />
+
             <div>
-              <label htmlFor="name" className="block text-sm mb-1.5">Name</label>
+              <label htmlFor="name" className="block text-sm mb-1.5">
+                Name
+              </label>
               <input
                 id="name"
                 name="name"
@@ -191,7 +222,9 @@ export default function ContactPage() {
             </div>
 
             <div>
-              <label htmlFor="business" className="block text-sm mb-1.5">Business name</label>
+              <label htmlFor="business" className="block text-sm mb-1.5">
+                Business name
+              </label>
               <input
                 id="business"
                 name="business"
@@ -200,7 +233,9 @@ export default function ContactPage() {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm mb-1.5">Email</label>
+              <label htmlFor="email" className="block text-sm mb-1.5">
+                Email
+              </label>
               <input
                 id="email"
                 name="email"
@@ -211,7 +246,9 @@ export default function ContactPage() {
             </div>
 
             <div>
-              <label htmlFor="message" className="block text-sm mb-1.5">What do you need?</label>
+              <label htmlFor="message" className="block text-sm mb-1.5">
+                What do you need?
+              </label>
               <textarea
                 id="message"
                 name="message"
