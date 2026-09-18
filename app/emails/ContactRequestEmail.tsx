@@ -55,8 +55,8 @@ export default function ContactRequestEmail({
                       <div style={logoRingInner}>
                         <Img
                           src={logoSrc ?? FALLBACK_LOGO}
-                          width="36"
-                          height="36"
+                          width="45"
+                          height="50"
                           alt={COMPANY_NAME}
                           style={logoImg}
                         />
@@ -91,7 +91,6 @@ export default function ContactRequestEmail({
 
             <Hr style={hr} />
 
-            {/* Mascot + footer, side by side — a friendly sign-off */}
             <table role="presentation" style={{ width: "100%" }}>
               <tbody>
                 <tr>
