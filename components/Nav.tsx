@@ -11,6 +11,7 @@ const links = [
   { href: "/work", label: "Work" },
   { href: "/customize", label: "Customize" },
   { href: "/behind-the-scenes", label: "Process" },
+  { href: "/rcw-lab", label: "RCW-Lab" },
   { href: "/about", label: "About" },
   { href: "/faq", label: "FAQ" },
 ];
