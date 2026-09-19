@@ -340,3 +340,24 @@ body {
 .lava-blob-4 {
   animation: lava-drift-b 17s ease-in-out infinite reverse;
 }
+@keyframes glow-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 18px rgba(225, 48, 108, 0.35))
+      drop-shadow(0 0 6px rgba(131, 58, 180, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 34px rgba(253, 29, 29, 0.5))
+      drop-shadow(0 0 14px rgba(131, 58, 180, 0.45));
+  }
+}
+
+.glow-pulse {
+  animation: glow-pulse 3.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow-pulse {
+    animation: none;
+  }
+}

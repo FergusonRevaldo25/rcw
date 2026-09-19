@@ -11,6 +11,7 @@ const links = [
   { href: "/work", label: "Work" },
   { href: "/customize", label: "Customize" },
   { href: "/behind-the-scenes", label: "Process" },
+  { href: "/rcw-lab", label: "RCW Lab" },
   { href: "/about", label: "About" },
   { href: "/faq", label: "FAQ" },
 ];
@@ -21,7 +22,10 @@ export default function Nav() {
 
   const containerRef = useRef<HTMLElement>(null);
   const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
-  const [indicator, setIndicator] = useState<{ left: number; width: number } | null>(null);
+  const [indicator, setIndicator] = useState<{
+    left: number;
+    width: number;
+  } | null>(null);
 
   useEffect(() => {
     function measure() {
