@@ -3,15 +3,6 @@ import BudgetBar from "./BudgetBar";
 export default function HeroBanner() {
   return (
     <section className="relative overflow-hidden">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-40 -left-40 w-[520px] h-[520px] rounded-full opacity-30 blur-[110px]"
-        style={{
-          background:
-            "linear-gradient(135deg, #833AB4 0%, #E1306C 45%, #F77737 75%, #FCAF45 100%)",
-        }}
-      />
-
       <div className="container-page relative pt-16 pb-20 md:pt-24 md:pb-28">
         <div className="grid md:grid-cols-2 gap-12 items-start">
           <div>
