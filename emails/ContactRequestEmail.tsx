@@ -19,7 +19,7 @@ export type ContactRequestEmailProps = {
 };
 
 const COMPANY_NAME = process.env.COMPANY_NAME ?? "RCW";
-const FALLBACK_LOGO = "https://rcw-eta.vercel.app/logox.png";
+const FALLBACK_LOGO = "https://rcwonline.co.za/logox.png";
 
 const IG_GRADIENT =
   "linear-gradient(90deg, #833AB4 0%, #C13584 25%, #E1306C 50%, #FD1D1D 75%, #FCAF45 100%)";
