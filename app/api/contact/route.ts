@@ -39,8 +39,24 @@ function generateReference(): string {
 export async function POST(request: Request) {
   const body = await request.json();
 
+  // TEMP DEBUG — remove once this is sorted. Confirms the key is actually
+  // present at runtime (never logs the real value, just whether it exists
+  // and how long it is, which is enough to catch "empty" or "truncated").
+  console.log(
+    "DEBUG: RESEND_API_KEY present?",
+    Boolean(process.env.RESEND_API_KEY),
+  );
+  console.log(
+    "DEBUG: RESEND_API_KEY length:",
+    process.env.RESEND_API_KEY?.length ?? 0,
+  );
+  console.log("DEBUG: FROM_EMAIL resolved to:", FROM_EMAIL);
+  console.log("DEBUG: OWNER_EMAIL resolved to:", OWNER_EMAIL);
+  console.log("DEBUG: honeypot value:", JSON.stringify(body.honeypot));
+
   // Honeypot — bots fill hidden fields, real users never see this one.
   if (body.honeypot) {
+    console.log("DEBUG: honeypot triggered, exiting early");
     return NextResponse.json({ ok: true });
   }
 
@@ -59,7 +75,7 @@ export async function POST(request: Request) {
   const reference = generateReference();
 
   try {
-    const { error } = await resend.emails.send({
+    const notificationResult = await resend.emails.send({
       from: FROM_EMAIL,
       to: OWNER_EMAIL,
       replyTo,
@@ -73,6 +89,15 @@ export async function POST(request: Request) {
       text: body.message,
     });
 
+    // TEMP DEBUG — this is the important one. Full raw response from
+    // Resend, not just the destructured error field.
+    console.log(
+      "DEBUG: Full Resend notification result:",
+      JSON.stringify(notificationResult),
+    );
+
+    const { error } = notificationResult;
+
     if (error) {
       console.error("Resend error:", error);
       return NextResponse.json(
@@ -82,7 +107,7 @@ export async function POST(request: Request) {
     }
 
     if (replyTo) {
-      const { error: confirmError } = await resend.emails.send({
+      const confirmationResult = await resend.emails.send({
         from: FROM_EMAIL,
         to: replyTo,
         subject: `We've got your message — ${reference}`,
@@ -93,8 +118,17 @@ export async function POST(request: Request) {
         }),
       });
 
-      if (confirmError) {
-        console.error("Confirmation email failed (non-fatal):", confirmError);
+      // TEMP DEBUG
+      console.log(
+        "DEBUG: Full Resend confirmation result:",
+        JSON.stringify(confirmationResult),
+      );
+
+      if (confirmationResult.error) {
+        console.error(
+          "Confirmation email failed (non-fatal):",
+          confirmationResult.error,
+        );
       }
     }
 

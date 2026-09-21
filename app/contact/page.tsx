@@ -120,7 +120,7 @@ export default function ContactPage() {
           message: messageBody,
           replyTo: email,
           customerName: name,
-          honeypot: formData.get("company_website"),
+          honeypot: formData.get("rcw_hp_field"),
         }),
       });
 
@@ -198,14 +198,19 @@ export default function ContactPage() {
           )}
 
           <form ref={formRef} className="space-y-5">
-            {/* Honeypot field — hidden from real users via CSS, bots fill
-                it in. Checked server-side in /api/contact. */}
+            {/* Honeypot field — hidden from real users, bots (and
+                unfortunately some autofill tools) fill it in. Checked
+                server-side in /api/contact. Named to avoid resembling any
+                real autofill target, and hidden via display:none rather
+                than off-screen positioning — both reduce false triggers
+                from browser autofill/password managers. */}
             <input
               type="text"
-              name="company_website"
+              name="rcw_hp_field"
               tabIndex={-1}
               autoComplete="off"
-              className="absolute -left-[9999px]"
+              data-lpignore="true"
+              style={{ display: "none" }}
               aria-hidden="true"
             />
 
