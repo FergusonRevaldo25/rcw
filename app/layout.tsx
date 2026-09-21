@@ -7,7 +7,7 @@ import BubbleBackground from "@/components/BubbleBackground";
 import { SiteConfigProvider } from "@/lib/site-config";
 
 export const metadata: Metadata = {
-  title: "RCW — Custom Websites for Local Businesses",
+  title: "RCW — Custom Websites",
   description:
     "RCW builds custom websites for local businesses. Pick your budget, see what you get, and launch a site that actually brings in customers.",
 };

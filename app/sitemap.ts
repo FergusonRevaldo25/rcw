@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://rcw-eta.vercel.app";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://rcwonline.co.za";
 
 // Update this list whenever you add or remove a route.
 const routes = [
