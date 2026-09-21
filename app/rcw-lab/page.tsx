@@ -89,13 +89,24 @@ export default function RcwLabPage() {
               className="group relative aspect-[16/9] rounded-2xl gradient-ring overflow-hidden cursor-pointer"
               intensity={4}
             >
-              <Image
-                src="/mascot (10).png"
-                alt="From idea to working website"
-                fill
-                sizes="100vw"
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-              />
+              <video
+                src="/mascot (10).mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                aria-label="From idea to working website"
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-90"
+              >
+                <track
+                  kind="captions"
+                  srcLang="en"
+                  label="No spoken audio"
+                  src="/captions-empty.vtt"
+                  default
+                />
+              </video>
             </TiltCard>
           </ScrollReveal>
           <p className="text-center text-sm text-[var(--color-muted)] mt-4">
@@ -130,6 +141,7 @@ export default function RcwLabPage() {
       </section>
 
       {/* THE JOURNEY */}
+      {/* THE JOURNEY */}
       <section className="border-t border-black/10">
         <div className="container-page py-24 grid lg:grid-cols-2 gap-12 items-center">
           <ScrollReveal variant="left">
@@ -151,13 +163,24 @@ export default function RcwLabPage() {
               className="relative aspect-[4/5] rounded-2xl overflow-hidden"
               intensity={6}
             >
-              <Image
-                src="/macot (18).png"
-                alt="Keep moving"
-                fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover"
-              />
+              <video
+                src="/mascot (18).mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                aria-label="Keep moving"
+                className="absolute inset-0 h-full w-full object-cover"
+              >
+                <track
+                  kind="captions"
+                  srcLang="en"
+                  label="No spoken audio"
+                  src="/captions-empty.vtt"
+                  default
+                />
+              </video>
             </TiltCard>
           </ScrollReveal>
         </div>
