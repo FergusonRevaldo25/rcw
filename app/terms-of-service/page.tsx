@@ -1,45 +1,103 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About",
-  description:
-    "Meet the person behind RCW — real, hand-coded websites for local businesses in Cape Town.",
-  alternates: { canonical: "/about" },
+  title: "Terms of Service — RCW",
+  description: "The terms that apply when you work with RCW.",
 };
 
-export default function AboutPage() {
+export default function TermsOfServicePage() {
   return (
-    <section className="container-page py-20 max-w-2xl">
-      <h1 className="text-4xl font-bold mb-6">About RCW</h1>
-      <p className="text-[var(--color-muted)] mb-4">
-        RCW is a one-person operation(mine). I build custom websites for local
-        businesses: the kind that live or die on whether a customer can find
-        them, trust them, and get in touch quickly.
+    <section className="container-page py-20 max-w-3xl">
+      <h1 className="text-4xl font-bold mb-4">Terms of Service</h1>
+      <p className="text-sm text-[var(--color-muted)] mb-12">
+        Last updated:{" "}
+        {new Date().toLocaleDateString("en-ZA", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })}
       </p>
-      <p className="text-[var(--color-muted)] mb-4">
-        I got here by building a lot, fast, leaning hard on AI tools to do it.
-        It taught me a lot, and it's part of where my AI and automation skills
-        come from but it also taught me something more important: most business
-        owners can feel the difference between a site that was actually built
-        for them and one that was generated and dressed up to look custom. That
-        gap is exactly why RCW exists. Every site I build is planned and
-        hand-coded with real intention I know what's going where, why it's
-        there, and what needs to change as your business grows. Nothing here is
-        a shortcut wearing a nice coat.
-      </p>
-      <p className="text-[var(--color-muted)] mb-4">
-        I completed my NQF 5 in Information Technology – Software Development at
-        Eduvos in February 2026 and will be starting my Bachelor's degree next
-        year, while currently working full-time as an IT Systems Administrator &
-        Developer at Loot.co.za. That combination matters more than it sounds:
-        managing real production infrastructure on AWS and Linux every day keeps
-        me grounded in how systems actually behave under load, and that's
-        exactly what I bring into every project, not just clean code, but
-        reliable, scalable solutions built to perform in real environments.
-      </p>
-      <a href="/contact" className="btn-primary mt-6 inline-flex">
-        Get a quote
-      </a>
+
+      <div className="space-y-10 text-[var(--color-fg)]">
+        <div>
+          <h2 className="text-xl font-bold mb-3">1. Our service</h2>
+          <p className="text-[var(--color-muted)]">
+            RCW designs and builds custom websites for local businesses. The
+            features included in your build depend on the package or budget you
+            agree to before work begins.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-xl font-bold mb-3">2. Quotes</h2>
+          <p className="text-[var(--color-muted)]">
+            Figures shown on this website (including the budget slider) are
+            indicative starting points, not binding quotes. A final price is
+            only confirmed once we've discussed your specific requirements
+            directly.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-xl font-bold mb-3">3. Payment</h2>
+          <p className="text-[var(--color-muted)]">
+            The build cost is a once-off fee, agreed before work begins. Your
+            domain name is a separate, recurring yearly cost, renewed annually
+            to keep your site live — this applies no matter who builds your
+            site. Any ongoing support after launch is billed separately unless
+            otherwise agreed in writing.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-xl font-bold mb-3">4. Revisions</h2>
+          <p className="text-[var(--color-muted)]">
+            The scope of revisions included is agreed with you before work
+            begins. Changes beyond that agreed scope may incur an additional
+            cost, which we'll always discuss with you first.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-xl font-bold mb-3">5. Ownership</h2>
+          <p className="text-[var(--color-muted)]">
+            Once your website is paid for in full, it's yours. You own the final
+            site and its content, subject to any third-party licenses (such as
+            stock imagery) disclosed at the time.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-xl font-bold mb-3">6. Liability</h2>
+          <p className="text-[var(--color-muted)]">
+            We aim to deliver a working, reliable website, but we can't
+            guarantee uninterrupted uptime, since hosting and third-party
+            services are outside our direct control. We're not liable for
+            indirect or consequential losses arising from use of your website.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-xl font-bold mb-3">7. Governing law</h2>
+          <p className="text-[var(--color-muted)]">
+            These terms are governed by the laws of South Africa.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-xl font-bold mb-3">Contact</h2>
+          <p className="text-[var(--color-muted)]">
+            Questions about these terms? Email{" "}
+            <a
+              href="mailto:welcome@rcwonline.co.za"
+              className="underline hover:text-[var(--color-fg)]"
+            >
+              welcome@rcwonline.co.za
+            </a>
+            .
+          </p>
+        </div>
+      </div>
     </section>
   );
 }
