@@ -41,7 +41,16 @@ export default function TiltCard({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className={`transition-transform duration-200 ease-out will-change-transform ${className ?? ""}`}
-      style={{ transformStyle: "preserve-3d" }}
+      // transform-style: preserve-3d removed — it forced any <video>
+      // inside the card into a 3D compositing path that flickers/tears in
+      // Chrome and Safari. Not needed here since every usage wraps a
+      // single flat image or video, not layered 3D children, so dropping
+      // it changes nothing visually while fixing the video glitch.
+      // backfaceVisibility hidden is extra insurance against the same bug.
+      style={{
+        backfaceVisibility: "hidden",
+        WebkitBackfaceVisibility: "hidden",
+      }}
     >
       {children}
     </div>
