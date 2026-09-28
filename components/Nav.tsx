@@ -11,6 +11,7 @@ const links = [
   { href: "/work", label: "Work" },
   { href: "/customize", label: "Customize" },
   { href: "/behind-the-scenes", label: "Process" },
+  { href: "/launch", label: "Launch" },
   { href: "/rcw-lab", label: "RCW-Lab" },
   { href: "/about", label: "About" },
   { href: "/faq", label: "FAQ" },
@@ -61,7 +62,7 @@ export default function Nav() {
             actual DOM node, so it stays correct no matter the label length. */}
           <nav
             ref={containerRef}
-            className="relative hidden md:flex items-center gap-1 rounded-full border border-black/10 bg-[var(--color-bg-raised)] p-1"
+            className="relative hidden xl:flex items-center gap-1 rounded-full border border-black/10 bg-[var(--color-bg-raised)] p-1"
           >
             {indicator && (
               <span
@@ -80,7 +81,7 @@ export default function Nav() {
                   ref={(el) => {
                     linkRefs.current[link.href] = el;
                   }}
-                  className={`relative z-10 px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-300 ${
+                  className={`relative z-10 px-3 py-1.5 rounded-full text-sm font-medium transition-colors duration-300 ${
                     isActive
                       ? "text-white"
                       : "text-[var(--color-muted)] hover:text-[var(--color-fg)]"
@@ -94,14 +95,14 @@ export default function Nav() {
 
           <Link
             href="/contact"
-            className="btn-primary hidden md:inline-flex text-sm"
+            className="btn-primary hidden xl:inline-flex text-sm"
           >
             Get a quote
           </Link>
 
           <button
             onClick={() => setOpen(!open)}
-            className="md:hidden p-2 -mr-2"
+            className="xl:hidden p-2 -mr-2"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
           >
@@ -112,7 +113,7 @@ export default function Nav() {
         </div>
 
         {open && (
-          <nav className="md:hidden mt-2 rounded-2xl border border-black/10 bg-[var(--color-bg)] shadow-lg px-6 py-4 flex flex-col gap-4">
+          <nav className="xl:hidden mt-2 rounded-2xl border border-black/10 bg-[var(--color-bg)] shadow-lg px-6 py-4 flex flex-col gap-4">
             {links.map((link) => {
               const isActive = pathname === link.href;
               return (
