@@ -8,6 +8,7 @@ import Logo from "./Logo";
 const links = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Services" },
+  { href: "/clients", label: "Clients" },
   { href: "/work", label: "Work" },
   { href: "/customize", label: "Customize" },
   { href: "/behind-the-scenes", label: "Process" },
